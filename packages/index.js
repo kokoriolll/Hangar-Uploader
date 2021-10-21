@@ -1,5 +1,4 @@
 import hangarUploader from "./hangar-uploader/index";
-
 const components = [hangarUploader];
 
 const install = function(Vue) {
