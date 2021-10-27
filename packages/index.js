@@ -1,8 +1,7 @@
-import hangarUploader from "./hangar-uploader/index";
-const components = [hangarUploader];
+import HangarUploader from './HangarUploader/index';
+const components = [HangarUploader];
 
 const install = function(Vue) {
-  // use ant组件
   if (install.installed) return;
   install.installed = true;
 
@@ -17,5 +16,5 @@ if (typeof window !== 'undefined' && window.Vue) {
 
 export default {
   install,
-  hangarUploader
-}
+  HangarUploader
+};
