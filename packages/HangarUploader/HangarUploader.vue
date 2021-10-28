@@ -13,39 +13,9 @@
       <!-- 判断文件图标 -->
       <span class="file-type">
         <a-icon
-          v-if="item.name.substr(item.name.lastIndexOf('.')).toLowerCase() === '.png'"
-          type="file-image"
-          style="color: #faad14;"
-        />
-        <a-icon
-          v-else-if="item.name.substr(item.name.lastIndexOf('.')).toLowerCase() === '.jpg'"
-          type="file-image"
-          style="color: #faad14;"
-        />
-        <a-icon
-          v-else-if="item.name.substr(item.name.lastIndexOf('.')).toLowerCase() === '.pdf'"
-          type="file-pdf"
-          style="color: #f5222d;"
-        />
-        <a-icon
-          v-else-if="item.name.substr(item.name.lastIndexOf('.')).toLowerCase() === '.doc'"
-          type="file-word"
-          style="color: #1890ff;"
-        />
-        <a-icon
-          v-else-if="item.name.substr(item.name.lastIndexOf('.')).toLowerCase() === '.docx'"
-          type="file-word"
-          style="color: #1890ff;"
-        />
-        <a-icon
-          v-else-if="item.name.substr(item.name.lastIndexOf('.')).toLowerCase() === '.xls'"
-          type="file-excel"
-          style="color: #52c41a;"
-        />
-        <a-icon
-          v-else-if="item.name.substr(item.name.lastIndexOf('.')).toLowerCase() === '.xlsx'"
-          type="file-excel"
-          style="color: #52c41a;"
+          v-if="fileType[item.name.substr(item.name.lastIndexOf('.') + 1).toLowerCase()]"
+          :type="fileType[item.name.substr(item.name.lastIndexOf('.') + 1).toLowerCase()].icon"
+          :style="{ color: fileType[item.name.substr(item.name.lastIndexOf('.') + 1).toLowerCase()].color }"
         />
         <a-icon v-else type="file" />
       </span>
@@ -54,21 +24,8 @@
       <!-- 文件操作 -->
       <span class="file-function">
         <a @click="download(item)">下载</a>
-        <a
-          v-if="item.name.substr(item.name.lastIndexOf('.')).toLowerCase() === '.pdf'"
-          @click="openPdf(item)"
-        >预览</a
-        >
-        <a
-          v-if="item.name.substr(item.name.lastIndexOf('.')).toLowerCase() === '.jpg'"
-          @click="picViewer(item)"
-        >预览</a
-        >
-        <a
-          v-if="item.name.substr(item.name.lastIndexOf('.')).toLowerCase() === '.png'"
-          @click="picViewer(item)"
-        >预览</a
-        >
+        <a v-if="isPreviewShow(item.name.substr(item.name.lastIndexOf('.') + 1).toLowerCase(), 'pdfPreview')" @click="openPdf(item)" >预览</a>
+        <a v-if="isPreviewShow(item.name.substr(item.name.lastIndexOf('.') + 1).toLowerCase(), 'preview')" @click="picViewer(item)" >预览</a>
         <a-icon v-if="!disabled" @click.stop="delFile(index)" type="close" />
       </span>
     </div>
@@ -104,7 +61,6 @@
               拖动文件到此处，或点击此处
             </p>
           </uploader-btn>
-          <!--<uploader-btn :attrs="attrs">选择图片</uploader-btn>-->
         </uploader-drop>
         <uploader-list></uploader-list>
       </uploader>
@@ -122,6 +78,8 @@
   import storage from 'store';
   import { ACCESS_TOKEN } from '../../examples/store/mutation-types';
   import SparkMD5 from 'spark-md5';
+  import { fileType } from './fileTypeConfig';
+  import { has } from 'lodash';
   export default {
     name: 'HangarUploader',
     props: {
@@ -178,6 +136,7 @@
     },
     data() {
       return {
+        fileType,
         sequence: [], // 待合并序列
         resetUploader: true,
         fileData: [], // 附件所存信息
@@ -279,7 +238,7 @@
       },
       /**
        * @description 下载附件
-       * @param {type} 无参
+       * @param {Object} item 当前文件的ID和NAME
        * @Modify
        */
       download(item) {
@@ -287,8 +246,7 @@
       },
       /**
        * @description 预览PDF
-       * @param {type} 无参
-       * @Modify
+       * @param {Object} item 当前文件的ID和NAME
        */
       openPdf(item) {
         window.open(this.openPdfUrl + item.id, '_blank');
@@ -328,14 +286,6 @@
         setTimeout(() => {
           this.resetUploader = true;
         }, 500);
-      },
-      /**
-       * @description 项目描述
-       * @param {type} 无参
-       * @Modify
-       */
-      handleFileOk() {
-        // do some thing
       },
       /**
        * 打开上传控件窗口
@@ -441,8 +391,7 @@
        */
       computeMD5(file) {
         const fileReader = new FileReader();
-        const blobSlice =
-          File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice;
+        const blobSlice = File.prototype.slice || File.prototype.mozSlice || File.prototype.webkitSlice;
         let currentChunk = 0;
         const chunkSize = 10 * 1024 * 1000;
         const chunks = Math.ceil(file.size / chunkSize);
@@ -475,7 +424,7 @@
       },
       /**
        * @description 预览照片
-       * @param {type} 无参
+       * @param {Object} item 当前文件的ID和NAME
        * @Modify
        */
       picViewer(item) {
@@ -484,8 +433,6 @@
       },
       /**
        * @description 预览弹窗的关闭事件
-       * @param {type} 无参
-       * @Modify
        */
       handleViewCancel() {
         this.previewVisible = false;
@@ -494,6 +441,15 @@
           this.previewImage = '';
           this.pdfFilePath = '';
         }, 300);
+      },
+      /**
+       * @desc 判断当前文件是否可以预览
+       * @param extension {String} 当前文件的扩展名
+       * @param field {String} 需要判断的字段名
+       * @return {Boolean} 返回true或false来判断是否显示预览按钮
+       */
+      isPreviewShow(extension, field) {
+        return has(fileType[extension], field);
       }
     }
   };
@@ -569,10 +525,11 @@
     width: 260px;
     height: 30px;
     line-height: 30px;
-    padding-left: 6px;
+    padding: 0 10px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    text-align: left;
   }
 
   .file-function {
