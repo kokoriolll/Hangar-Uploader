@@ -1,4 +1,6 @@
-# hangar-uploader
+# hangar-uploader 
+
+## 基于vue-simple-uploader二次开发的插件
 
 ## Project setup
 ```
