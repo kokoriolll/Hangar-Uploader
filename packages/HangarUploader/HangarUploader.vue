@@ -87,7 +87,10 @@
         type: Boolean,
         default: false
       },
-      text: String,
+      text: {
+        type: String,
+        default: ''
+      },
       value: {
         type: String,
         default: ''
@@ -189,10 +192,7 @@
             }
             cb(null, response);
           }
-        }, // 附件配置
-        /* attrs: {
-          accept: ''
-        }, // 上传类型配置 */
+        },
         statusText: {
           success: '成功了',
           error: '出错了',
@@ -202,7 +202,6 @@
           computedMD5: '校验中'
         }, // 自定义文字
         visible: false, // 上传组件弹窗
-        visibleFile: false, // 附件列表弹窗
         confirmLoading: false,
         previewVisible: false, // 图片预览弹窗
         previewImage: '', // 图片的地址
@@ -252,18 +251,10 @@
         window.open(this.openPdfUrl + item.id, '_blank');
       },
       /**
-       * @description 预览查看附件列表
-       * @Modify
-       */
-      showFileList() {
-        this.visibleFile = true;
-      },
-      /**
        * 取消上传
        */
       handleCancel() {
         this.visible = false;
-        this.visibleFile = false;
         this.resetUploader = false;
         setTimeout(() => {
           this.resetUploader = true;
@@ -436,10 +427,8 @@
        */
       handleViewCancel() {
         this.previewVisible = false;
-        this.pdfViewVisible = false;
         setTimeout(() => {
           this.previewImage = '';
-          this.pdfFilePath = '';
         }, 300);
       },
       /**

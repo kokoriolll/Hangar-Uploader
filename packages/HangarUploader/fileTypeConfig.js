@@ -85,7 +85,7 @@ export const fileType = {
   },
   md: {
     icon: 'file-markdown',
-    color: '#f5222d'
+    color: '#1890ff'
   },
   kokoriolll: {
     icon: 'smile',
