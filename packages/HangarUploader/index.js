@@ -1,3 +1,4 @@
+/* eslint-disable */
 import HangarUploader from './HangarUploader';
 
 HangarUploader.install = function(Vue) {
