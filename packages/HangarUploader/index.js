@@ -379,27 +379,29 @@ const hangarUploader =  {
             <span>{ this.text }</span>
             { this.disabled ? '' : <a-button onClick={ this.openUploader } type="link">上传</a-button> }
           </div>
-          <div class="file-item">
-            {this.fileData.map((item, index) => {
-              const extension = item.name.substr(item.name.lastIndexOf('.') + 1).toLowerCase();
-              return (
-                <section>
+          { this.fileData.length ?
+            <div class="file-item">
+              {this.fileData.map((item, index) => {
+                const extension = item.name.substr(item.name.lastIndexOf('.') + 1).toLowerCase();
+                return (
+                  <section>
                   <span class="file-type">
                     {fileType[extension] ?
                       <a-icon type={fileType[extension].icon} style={{color: fileType[extension].color}}/> :
                       <a-icon v-else type="file"/>}
                   </span>
-                  <span class="file-name">{item.name}</span>
-                  <span class="file-function">
+                    <span class="file-name">{item.name}</span>
+                    <span class="file-function">
                     <a onClick={() => this.download(item)}>下载</a>
-                    {this.isPreviewShow(extension, 'pdfPreview') ? <a onClick={() => this.openPdf(item)}>预览</a> : ''}
-                    {this.isPreviewShow(extension, 'preview') ? <a onClick={() => this.picViewer(item)}>预览</a> : ''}
-                    {this.disabled ? '' : <a-icon vOn:Click_stop_prevent={() => this.delFile(index)} type="close"/>}
+                      {this.isPreviewShow(extension, 'pdfPreview') ? <a onClick={() => this.openPdf(item)}>预览</a> : ''}
+                      {this.isPreviewShow(extension, 'preview') ? <a onClick={() => this.picViewer(item)}>预览</a> : ''}
+                      {this.disabled ? '' : <a-icon vOn:Click_stop_prevent={() => this.delFile(index)} type="close"/>}
                   </span>
-                </section>
-              )
-            })}
-          </div>
+                  </section>
+                )
+              })}
+            </div>
+            : '' }
           <a-modal
             maskClosable={ false }
             visible={ this.visible }
