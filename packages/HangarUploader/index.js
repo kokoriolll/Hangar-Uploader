@@ -149,7 +149,6 @@ const hangarUploader =  {
      * @return {type} 无返回
      */
     delFile(index) {
-      console.log('1321312');
       this.$confirm({
         title: '确定要删除吗?',
         okText: '确定',
@@ -395,25 +394,28 @@ const hangarUploader =  {
                     <a onClick={() => this.download(item)}>下载</a>
                     {this.isPreviewShow(extension, 'pdfPreview') ? <a onClick={() => this.openPdf(item)}>预览</a> : ''}
                     {this.isPreviewShow(extension, 'preview') ? <a onClick={() => this.picViewer(item)}>预览</a> : ''}
-                    {this.disabled ? '' : <a-icon onClick={() => this.delFile(index)} type="close"/>}
+                    {this.disabled ? '' : <a-icon vOn:Click_stop_prevent={() => this.delFile(index)} type="close"/>}
                   </span>
                 </section>
               )
             })}
           </div>
           <a-modal
-            { ...{ props: { maskClosable: false, visible: this.visible, confirmLoading: this.confirmLoading } } }
+            maskClosable={ false }
+            visible={ this.visible }
+            confirmLoading={ this.confirmLoading }
             width="1000px"
             title="上传"
             onOk={ this.handleOk }
             onCancel={ this.handleCancel }
           >
             { this.isComputeMD5Show ? <div class="spin-box">
-              <a-spin class="bodySpin" { ...{ props: { spinning: this.isComputeMD5Show } } } tip="正在校验文件，请稍等" />
+              <a-spin class="bodySpin" spinning={ this.isComputeMD5Show } tip="正在校验文件，请稍等" />
             </div> : '' }
             { this.resetUploader ?
               <uploader
-                { ...{ props: { options: this.options, fileStatusText: this.statusText } } }
+                options={ this.options }
+                fileStatusText={ this.statusText }
                 class="uploader-example enclosure"
                 onFileComplete={ this.fileComplete }
                 onFileError={ this.fileError }
@@ -421,7 +423,7 @@ const hangarUploader =  {
               >
                 <uploader-unsupport></uploader-unsupport>
                 <uploader-drop>
-                  <uploader-btn { ...{ props: { attrs: this.attrs } } }>
+                  <uploader-btn attrs={ this.attrs }>
                   <a-icon style="font-size: 48px; color: #1890ff" type="inbox" />
                   <p style="font-size: 18px; margin-top: 20px; font-weight: 600;">
                     拖动文件到此处，或点击此处
@@ -432,7 +434,7 @@ const hangarUploader =  {
               </uploader>
               : '' }
           </a-modal>
-          <a-modal { ...{ props: { visible: this.previewVisible, footer: null, width: 800 } } } onCancel={this.handleViewCancel}>
+          <a-modal visible={ this.previewVisible } footer={ null } width={ 800 } onCancel={this.handleViewCancel}>
             <img style="width: 100%; margin-top: 20px;" { ...{ props: { src: this.previewImage } } }/>
           </a-modal>
         </div>
