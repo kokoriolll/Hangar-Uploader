@@ -8,10 +8,7 @@ import { ACCESS_TOKEN } from '../../examples/store/mutation-types';
 import SparkMD5 from 'spark-md5';
 import { fileType } from './fileTypeConfig';
 import { has } from 'lodash';
-
-hangarUploader.install = function(Vue) {
-  Vue.component(hangarUploader.name, hangarUploader);
-};
+import {uploaderStyle} from "./config";
 
 const hangarUploader =  {
   name: 'HangarUploader',
@@ -152,6 +149,7 @@ const hangarUploader =  {
      * @return {type} 无返回
      */
     delFile(index) {
+      console.log('1321312');
       this.$confirm({
         title: '确定要删除吗?',
         okText: '确定',
@@ -373,7 +371,79 @@ const hangarUploader =  {
     isPreviewShow(extension, field) {
       return has(fileType[extension], field);
     }
+  },
+  render() {
+    return (
+      <section>
+        <div class="box">
+          <div>
+            <span>{ this.text }</span>
+            { this.disabled ? '' : <a-button onClick={ this.openUploader } type="link">上传</a-button> }
+          </div>
+          <div class="file-item">
+            {this.fileData.map((item, index) => {
+              const extension = item.name.substr(item.name.lastIndexOf('.') + 1).toLowerCase();
+              return (
+                <section>
+                  <span class="file-type">
+                    {fileType[extension] ?
+                      <a-icon type={fileType[extension].icon} style={{color: fileType[extension].color}}/> :
+                      <a-icon v-else type="file"/>}
+                  </span>
+                  <span class="file-name">{item.name}</span>
+                  <span class="file-function">
+                    <a onClick={() => this.download(item)}>下载</a>
+                    {this.isPreviewShow(extension, 'pdfPreview') ? <a onClick={() => this.openPdf(item)}>预览</a> : ''}
+                    {this.isPreviewShow(extension, 'preview') ? <a onClick={() => this.picViewer(item)}>预览</a> : ''}
+                    {this.disabled ? '' : <a-icon onClick={() => this.delFile(index)} type="close"/>}
+                  </span>
+                </section>
+              )
+            })}
+          </div>
+          <a-modal
+            { ...{ props: { maskClosable: false, visible: this.visible, confirmLoading: this.confirmLoading } } }
+            width="1000px"
+            title="上传"
+            onOk={ this.handleOk }
+            onCancel={ this.handleCancel }
+          >
+            { this.isComputeMD5Show ? <div class="spin-box">
+              <a-spin class="bodySpin" { ...{ props: { spinning: this.isComputeMD5Show } } } tip="正在校验文件，请稍等" />
+            </div> : '' }
+            { this.resetUploader ?
+              <uploader
+                { ...{ props: { options: this.options, fileStatusText: this.statusText } } }
+                class="uploader-example enclosure"
+                onFileComplete={ this.fileComplete }
+                onFileError={ this.fileError }
+                onFileAdded={ this.fileAdded }
+              >
+                <uploader-unsupport></uploader-unsupport>
+                <uploader-drop>
+                  <uploader-btn { ...{ props: { attrs: this.attrs } } }>
+                  <a-icon style="font-size: 48px; color: #1890ff" type="inbox" />
+                  <p style="font-size: 18px; margin-top: 20px; font-weight: 600;">
+                    拖动文件到此处，或点击此处
+                  </p>
+                </uploader-btn>
+              </uploader-drop>
+              <uploader-list></uploader-list>
+              </uploader>
+              : '' }
+          </a-modal>
+          <a-modal { ...{ props: { visible: this.previewVisible, footer: null, width: 800 } } } onCancel={this.handleViewCancel}>
+            <img style="width: 100%; margin-top: 20px;" { ...{ props: { src: this.previewImage } } }/>
+          </a-modal>
+        </div>
+        <style>{ uploaderStyle }</style>
+      </section>
+    )
   }
 }
 
-export default HangarUploader;
+hangarUploader.install = function(Vue) {
+  Vue.component(hangarUploader.name, hangarUploader);
+};
+
+export default hangarUploader;
