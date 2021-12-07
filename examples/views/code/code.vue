@@ -9,13 +9,13 @@
     name: 'Code',
     data() {
       return {
-        value: ''
+        value: '[{"id":"1","name":"123.pdf"}]'
       };
     },
     mounted() {
-      setTimeout(() => {
-        this.value = '[{"id":"1","name":"陈老师摄影教学.pdf"}]';
-      }, 600);
+      /* setTimeout(() => {
+        this.value = '[{"id":"1","name":"123.pdf"}]';
+      }, 600); */
     }
   };
 </script>

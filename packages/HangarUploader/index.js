@@ -55,9 +55,12 @@ const hangarUploader =  {
     }
   },
   watch: {
-    value(val) {
-      if (!val) return;
-      this.fileData = JSON.parse(val);
+    value: {
+      handler(val) {
+        if (!val) return;
+        this.fileData = JSON.parse(val);
+      },
+      immediate: true
     },
     uploadOptions: {
       handler(val) {
