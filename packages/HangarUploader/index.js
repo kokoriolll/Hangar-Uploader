@@ -375,7 +375,6 @@ const hangarUploader =  {
     }
   },
   render() {
-    console.log('render', this.fileData);
     return (
       <section>
         <div class="box">
@@ -386,7 +385,6 @@ const hangarUploader =  {
           { this.fileData ?
             <div class="file-item">
               {this.fileData.map((item, index) => {
-                console.log('item', item);
                 const extension = item.name.substr(item.name.lastIndexOf('.') + 1).toLowerCase();
                 return (
                   <section>
