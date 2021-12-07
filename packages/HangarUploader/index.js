@@ -375,6 +375,7 @@ const hangarUploader =  {
     }
   },
   render() {
+    console.log('render', this.fileData);
     return (
       <section>
         <div class="box">
@@ -382,24 +383,25 @@ const hangarUploader =  {
             <span>{ this.text }</span>
             { this.disabled ? '' : <a-button onClick={ this.openUploader } type="link">上传</a-button> }
           </div>
-          { this.fileData.length ?
+          { this.fileData ?
             <div class="file-item">
               {this.fileData.map((item, index) => {
+                console.log('item', item);
                 const extension = item.name.substr(item.name.lastIndexOf('.') + 1).toLowerCase();
                 return (
                   <section>
-                  <span class="file-type">
-                    {fileType[extension] ?
-                      <a-icon type={fileType[extension].icon} style={{color: fileType[extension].color}}/> :
-                      <a-icon v-else type="file"/>}
-                  </span>
+                    <span class="file-type">
+                      {fileType[extension] ?
+                        <a-icon type={fileType[extension].icon} style={{color: fileType[extension].color}}/> :
+                        <a-icon v-else type="file"/>}
+                    </span>
                     <span class="file-name">{item.name}</span>
                     <span class="file-function">
-                    <a onClick={() => this.download(item)}>下载</a>
+                      <a onClick={() => this.download(item)}>下载</a>
                       {this.isPreviewShow(extension, 'pdfPreview') ? <a onClick={() => this.openPdf(item)}>预览</a> : ''}
                       {this.isPreviewShow(extension, 'preview') ? <a onClick={() => this.picViewer(item)}>预览</a> : ''}
                       {this.disabled ? '' : <a-icon vOn:Click_stop_prevent={() => this.delFile(index)} type="close"/>}
-                  </span>
+                    </span>
                   </section>
                 )
               })}
@@ -411,8 +413,8 @@ const hangarUploader =  {
             confirmLoading={ this.confirmLoading }
             width="1000px"
             title="上传"
-            onOk={ this.handleOk }
-            onCancel={ this.handleCancel }
+            on-ok={ this.handleOk }
+            on-cancel={ this.handleCancel }
             okText="保存"
             cancelText="取消"
           >
@@ -424,9 +426,9 @@ const hangarUploader =  {
                 options={ this.options }
                 fileStatusText={ this.statusText }
                 class="uploader-example enclosure"
-                onFileComplete={ this.fileComplete }
-                onFileError={ this.fileError }
-                onFileAdded={ this.fileAdded }
+                on-file-complete={ this.fileComplete }
+                on-file-error={ this.fileError }
+                on-file-added={ this.fileAdded }
               >
                 <uploader-unsupport></uploader-unsupport>
                 <uploader-drop>

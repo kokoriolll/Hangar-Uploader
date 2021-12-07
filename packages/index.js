@@ -1,5 +1,5 @@
 import HangarUploader from './HangarUploader/index';
-import '../packages/lazy_use';
+// import '../packages/lazy_use';
 const components = [HangarUploader];
 
 const install = function(Vue) {
