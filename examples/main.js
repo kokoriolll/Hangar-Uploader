@@ -2,7 +2,6 @@ import Vue from 'vue';
 import App from './App.vue';
 import router from './router';
 import store from './store';
-import '../packages/lazy_use';
 import HangarUploader from '../packages/index';
 import uploader from 'vue-simple-uploader';
 

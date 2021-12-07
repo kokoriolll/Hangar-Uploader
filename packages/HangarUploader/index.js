@@ -410,6 +410,8 @@ const hangarUploader =  {
             title="上传"
             onOk={ this.handleOk }
             onCancel={ this.handleCancel }
+            okText="保存"
+            cancelText="取消"
           >
             { this.isComputeMD5Show ? <div class="spin-box">
               <a-spin class="bodySpin" spinning={ this.isComputeMD5Show } tip="正在校验文件，请稍等" />
