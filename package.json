@@ -1,12 +1,16 @@
 {
   "name": "hangar-uploader",
-  "version": "0.1.0",
-  "private": true,
+  "version": "0.2.0",
+  "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "lib": "vue-cli-service build --target lib --name hangar-uploader --dest lib packages/index.js && npm run mini",
+    "mini": "vue-cli-service build --target lib --name hangar-uploader --dest lib packages/mini.js --no-clean"
   },
+  "main": "./lib/hangar-uploader.umd.js",
+  "files": ["lib/*","*.json", "*.js"],
   "dependencies": {
     "ant-design-vue": "^1.7.8",
     "axios": "^0.24.0",
