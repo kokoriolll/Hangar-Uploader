@@ -3,11 +3,9 @@ import App from './App.vue';
 import router from './router';
 import store from './store';
 import HangarUploader from '../packages/index';
-import uploader from 'vue-simple-uploader';
 import '../packages/lazy_use';
 
 Vue.use(HangarUploader);
-Vue.use(uploader);
 Vue.config.productionTip = false;
 
 new Vue({

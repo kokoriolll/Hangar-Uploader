@@ -4,14 +4,18 @@
 import axios from 'axios';
 import qs from 'qs';
 import storage from 'store';
-import { ACCESS_TOKEN } from '../../examples/store/mutation-types';
 import SparkMD5 from 'spark-md5';
-import { fileType } from './fileTypeConfig';
 import { has } from 'lodash';
+import uploader from 'vue-simple-uploader';
+import { ACCESS_TOKEN } from '../../examples/store/mutation-types';
+import { fileType } from './fileTypeConfig';
 import {uploaderStyle} from "./config";
 
 const hangarUploader =  {
   name: 'HangarUploader',
+  components: {
+    uploader
+  },
   props: {
     disabled: {
       type: Boolean,
